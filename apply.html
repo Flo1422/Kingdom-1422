@@ -514,16 +514,36 @@ form.addEventListener('submit', async function(e) {
     submitted_at:   new Date().toUTCString(),
   };
 
+  const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1521173191173603338/JB-FDcCx9g2dH0g0_hWZyhzfD7Q0gcqO1p7hGScERZAtleDUKDbJt_M3mi1JBoJUjiB6';
+
+  const discordMsg = `📋 **New Application — ${data.ingame_name}**
+**Player ID:** ${data.player_id}
+**Discord:** ${data.discord_name}
+**Power:** ${data.power_level}
+**Current Kingdom:** ${data.current_kingdom}
+**Current Alliance:** ${data.current_alliance}
+**Preferred Alliance:** ${data.alliance_pref}
+**Transfer Passes:** ${data.transfer_passes}
+**Playstyle:** ${data.play_style}
+**Active Times:** ${data.play_times}
+**TC Hits Stance:** ${data.tc_hits}
+**KvK Experience:** ${data.kvk_experience}
+**All Out:** ${data.allout_experience}
+**Event Activity:** ${data.event_activity}
+**Why 1422:** ${data.motivation}
+**Extra:** ${data.extra}`;
+
+  // Send to Discord using no-cors (fire and forget)
+  fetch(DISCORD_WEBHOOK, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content: discordMsg }),
+    mode: 'no-cors',
+  }).catch(e => console.log('Discord error:', e));
+
   try {
     // Send to EmailJS
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data);
-
-    // Send to Make.com → Discord
-    fetch('https://hook.eu1.make.com/bp9tcjj1a89aawd8vo2fcckulh31vl9b', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    }).catch(e => console.log('Make webhook error:', e));
     // Show success
     form.style.display = 'none';
     successState.style.display = 'block';
