@@ -514,44 +514,16 @@ form.addEventListener('submit', async function(e) {
     submitted_at:   new Date().toUTCString(),
   };
 
-  // Send to Discord Webhook
-  const discordPayload = {
-    embeds: [{
-      title: '📋 New Application — ' + data.ingame_name,
-      color: 0xc9a84c,
-      fields: [
-        { name: 'Player ID', value: data.player_id, inline: true },
-        { name: 'Discord', value: data.discord_name, inline: true },
-        { name: 'Power', value: data.power_level, inline: true },
-        { name: 'Current Kingdom', value: data.current_kingdom, inline: true },
-        { name: 'Current Alliance', value: data.current_alliance, inline: true },
-        { name: 'Preferred Alliance', value: data.alliance_pref, inline: true },
-        { name: 'Transfer Passes', value: data.transfer_passes, inline: true },
-        { name: 'Playstyle', value: data.play_style, inline: true },
-        { name: 'Active Times', value: data.play_times, inline: true },
-        { name: 'Previous Kingdoms', value: data.prev_kingdoms, inline: false },
-        { name: 'Group Type', value: data.group_type, inline: true },
-        { name: 'TC Hits Stance', value: data.tc_hits, inline: false },
-        { name: 'KvK Experience', value: data.kvk_experience.substring(0,1024), inline: false },
-        { name: 'All Out Experience', value: data.allout_experience.substring(0,1024), inline: false },
-        { name: 'Event Activity', value: data.event_activity, inline: true },
-        { name: 'Why Kingdom 1422', value: data.motivation.substring(0,1024), inline: false },
-        { name: 'Extra Notes', value: data.extra, inline: false },
-      ],
-      footer: { text: 'Kingdom 1422 · ' + data.submitted_at },
-      thumbnail: { url: 'https://i.imgur.com/placeholder.png' },
-    }]
-  };
-
   try {
-    const [emailRes, discordRes] = await Promise.all([
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data),
-      fetch('https://discord.com/api/webhooks/1521170410878537848/dG-jR4bgW-mrAbFZUFdE5UUw9MwJB0o3ibRIWkY3ktUSv2Ha537HnMbW5ffLsxOFjOT_', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(discordPayload),
-      })
-    ]);
+    // Send to EmailJS
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data);
+
+    // Send to Make.com → Discord
+    fetch('https://hook.eu1.make.com/bp9tcjj1a89aawd8vo2fcckulh31vl9b', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).catch(e => console.log('Make webhook error:', e));
     // Show success
     form.style.display = 'none';
     successState.style.display = 'block';
