@@ -288,6 +288,18 @@ footer p{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:va
       </div>
 
       <div class="field">
+        <label class="field-label">Do you have sufficient Transfer Passes? <span class="field-required">*</span></label>
+        <select name="transfer_passes">
+          <option value="" disabled selected>Select one</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+          <option value="Not sure">Not sure</option>
+        </select>
+        <div class="field-hint">Required to transfer to Kingdom 1422.</div>
+        <div class="field-error">Please select an option.</div>
+      </div>
+
+      <div class="field">
         <label class="field-label">Are you more of a Garrison Lead or Attack Lead player?</label>
         <select name="play_style">
           <option value="" disabled selected>Select your playstyle</option>
