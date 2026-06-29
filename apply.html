@@ -514,32 +514,12 @@ form.addEventListener('submit', async function(e) {
     submitted_at:   new Date().toUTCString(),
   };
 
-  const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1521173191173603338/JB-FDcCx9g2dH0g0_hWZyhzfD7Q0gcqO1p7hGScERZAtleDUKDbJt_M3mi1JBoJUjiB6';
-
-  const discordMsg = `📋 **New Application — ${data.ingame_name}**
-**Player ID:** ${data.player_id}
-**Discord:** ${data.discord_name}
-**Power:** ${data.power_level}
-**Current Kingdom:** ${data.current_kingdom}
-**Current Alliance:** ${data.current_alliance}
-**Preferred Alliance:** ${data.alliance_pref}
-**Transfer Passes:** ${data.transfer_passes}
-**Playstyle:** ${data.play_style}
-**Active Times:** ${data.play_times}
-**TC Hits Stance:** ${data.tc_hits}
-**KvK Experience:** ${data.kvk_experience}
-**All Out:** ${data.allout_experience}
-**Event Activity:** ${data.event_activity}
-**Why 1422:** ${data.motivation}
-**Extra:** ${data.extra}`;
-
-  // Send to Discord using no-cors (fire and forget)
-  fetch(DISCORD_WEBHOOK, {
+  // Send to Pipedream → Discord
+  fetch('https://132b580923e427a521485eb05cecf8cc.m.pipedream.net', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ content: discordMsg }),
-    mode: 'no-cors',
-  }).catch(e => console.log('Discord error:', e));
+    body: JSON.stringify(data),
+  }).catch(e => console.log('Pipedream error:', e));
 
   try {
     // Send to EmailJS
